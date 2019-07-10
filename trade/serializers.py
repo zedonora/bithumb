@@ -30,3 +30,10 @@ class XcoinSerializer(serializers.ModelSerializer):
         fields = (
             '__all__'
         )
+
+class TickerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Ticker
+        fields = (
+            '__all__'
+        )
