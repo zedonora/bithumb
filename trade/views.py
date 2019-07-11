@@ -51,7 +51,6 @@ class GetTicker(APIView):
         # Bithumb - ETH
         api = models.Bithumb
         raw_data = api.get_ticker_info(self)
-        print(raw_data)
         index = 1
         row = {}
         row['id'] = index
@@ -112,6 +111,22 @@ class GetTicker(APIView):
 
         return_list.append(row.copy())
 
+        # Bitmex - ETH
+        api = models.Bitmex
+        raw_data = api.get_ticker_info(self)
+        index = index + 1
+        row['id'] = index
+        row['name'] = 'Bitmex'
+        row['ticker'] = raw_data['price']
+        row['timestamp'] = row['timestamp']
+        # row['timestamp'] = raw_data['timestamp']
+        row['bidsprice'] = raw_data['sell_price']
+        row['bidquantity'] = raw_data['sell_size']
+        row['asksprice'] = raw_data['buy_price']
+        row['asksquantity'] = raw_data['buy_size']
+
+        return_list.append(row.copy())
+
         # Bittrex - ETH
         api = models.Bittrex
         raw_data = api.get_ticker_info(self)[0]
@@ -144,13 +159,28 @@ class GetTicker(APIView):
 
         return_list.append(row.copy())
 
+        # Coinbase - ETH
+        api = models.Coinbase
+        raw_data = api.get_ticker_info(self)
+        index = index + 1
+        row['id'] = index
+        row['name'] = 'Coinbase'
+        row['ticker'] = raw_data['price']
+        row['timestamp'] = row['timestamp']
+        #row['timestamp'] = raw_data['timestamp']
+        row['bidsprice'] = raw_data['bid_price']
+        row['bidquantity'] = raw_data['bid_size']
+        row['asksprice'] = raw_data['ask_price']
+        row['asksquantity'] = raw_data['ask_size']
+
+        return_list.append(row.copy())
+
         return_list = sorted(return_list, key=lambda k: k['id'])
 
         return_json = {}
         return_json['data'] = return_list
         print(return_json)
         return_json = json.loads(json.dumps(return_json))
-        #Response(status=status.HTTP_200_OK)
         return render(request, 'ticker.html', context=return_json)
 
 class GetAjaxTicker(APIView):
@@ -220,6 +250,22 @@ class GetAjaxTicker(APIView):
 
         return_list.append(row.copy())
 
+        # Bitmex - ETH
+        api = models.Bitmex
+        raw_data = api.get_ticker_info(self)[0]
+        index = index + 1
+        row['id'] = index
+        row['name'] = 'Bitmex'
+        row['ticker'] = raw_data['price']
+        row['timestamp'] = row['timestamp']
+        # row['timestamp'] = raw_data['timestamp']
+        row['bidsprice'] = raw_data['sell_price']
+        row['bidquantity'] = raw_data['sell_size']
+        row['asksprice'] = raw_data['buy_price']
+        row['asksquantity'] = raw_data['buy_size']
+
+        return_list.append(row.copy())
+
         # Bittrex - ETH
         api = models.Bittrex
         raw_data = api.get_ticker_info(self)[0]
@@ -249,6 +295,22 @@ class GetAjaxTicker(APIView):
         row['bidquantity'] = raw_data['b'][2]
         row['asksprice'] = raw_data['a'][0]
         row['asksquantity'] = raw_data['a'][2]
+
+        return_list.append(row.copy())
+
+        # Coinbase - ETH
+        api = models.Coinbase
+        raw_data = api.get_ticker_info(self)
+        index = index + 1
+        row['id'] = index
+        row['name'] = 'Coinbase'
+        row['ticker'] = raw_data['price']
+        row['timestamp'] = row['timestamp']
+        #row['timestamp'] = raw_data['timestamp']
+        row['bidsprice'] = raw_data['bid_price']
+        row['bidquantity'] = raw_data['bid_size']
+        row['asksprice'] = raw_data['ask_price']
+        row['asksquantity'] = raw_data['ask_size']
 
         return_list.append(row.copy())
 

@@ -8,6 +8,7 @@ import hmac, hashlib
 import urllib.parse
 import pycurl
 import json
+import cbpro
 from datetime import datetime
 from urllib.request import Request, urlopen
 
@@ -174,22 +175,22 @@ class Poloniex(models.Model):
 @python_2_unicode_compatible
 class Bitmex(models.Model):
     def get_ticker_info(self):
-        reqBTC = Request('https://www.bitmex.com/api/v1/orderBook/L2?symbol=ETH&depth=25' , headers={'User-Agent': 'Mozilla/5.0'})
-        readBTC = urlopen(reqBTC).read()
-        jsonBTC = json.loads(readBTC)
-        FindBTC = jsonBTC['last']
-        BTC = int(FindBTC)
-        urlTicker = urllib.request.urlopen('https://www.bitmex.com/api/v1/orderBook/L2?symbol=ETH&depth=25')
+        reqETH = Request('https://www.bitmex.com/api/v1/orderBook/L2?symbol=ETH&depth=1' , headers={'User-Agent': 'Mozilla/5.0'})
+        readETH = urlopen(reqETH).read()
+        jsonETH = json.loads(readETH)
+        sell_price = jsonETH[0]['price']
+        sell_size = jsonETH[0]['size']
+        buy_price = jsonETH[1]['price']
+        buy_size = jsonETH[1]['size']
+        urlTicker = urllib.request.urlopen('https://www.bitmex.com/api/v1/trade?symbol=ETH&count=1&reverse=false')
         readTicker = urlTicker.read()
         jsonTicker = json.loads(readTicker)
-        FindETC = jsonTicker['etc']['last']
-        ETC = int(FindETC)
-        FindBTC = jsonTicker['btc']['last']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['eth']['last']
-        ETH = int(FindETH)
-        FindXRP = jsonTicker['xrp']['last']
-        XRP = int(FindXRP)
+        jsonTicker = jsonTicker[0]
+        jsonTicker['sell_price'] = sell_price
+        jsonTicker['sell_size'] = sell_size
+        jsonTicker['buy_price'] = buy_price
+        jsonTicker['buy_size'] = buy_size
+        return jsonTicker
 
 @python_2_unicode_compatible
 class Bittrex(models.Model):
@@ -211,18 +212,17 @@ class Kraken(models.Model):
 @python_2_unicode_compatible
 class Coinbase(models.Model):
     def get_ticker_info(self):
-        reqBTC = Request('https://api.coinbase.com/v2/prices/BTC-USD/spot' , headers={'User-Agent': 'Mozilla/5.0'})
-        readBTC = urlopen(reqBTC).read()
-        jsonBTC = json.loads(readBTC)
-        FindBTC = jsonBTC['last']
-        urlTicker = urllib.request.urlopen('https://api.coinbase.com/v2/prices/BTC-USD/spot')
-        readTicker = urlTicker.read()
-        jsonTicker = json.loads(readTicker)
-        FindETC = jsonTicker['etc']['last']
-        ETC = int(FindETC)
-        FindBTC = jsonTicker['btc']['last']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['eth']['last']
-        ETH = int(FindETH)
-        FindXRP = jsonTicker['xrp']['last']
-        XRP = int(FindXRP)
+
+        public_client = cbpro.PublicClient()
+        order_book = public_client.get_product_order_book('BTC-USD')
+        bid_price = order_book['bids'][0][0]
+        bid_size = order_book['bids'][0][1]
+        ask_price = order_book['asks'][0][0]
+        ask_size = order_book['asks'][0][1]
+
+        jsonTicker = public_client.get_product_ticker(product_id='ETH-USD')
+        jsonTicker['bid_price'] = bid_price
+        jsonTicker['bid_size'] = bid_size
+        jsonTicker['ask_price'] = ask_price
+        jsonTicker['ask_size'] = ask_size
+        return jsonTicker
