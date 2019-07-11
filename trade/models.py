@@ -37,23 +37,19 @@ class XCoinAPI(models.Model):
     api_key = "";
     api_secret = "";
 
-    @property
     def __init__(self, api_key, api_secret):
         self.api_key = api_key;
         self.api_secret = api_secret;
 
-    @property
     def body_callback(self, buf):
         self.contents = buf;
 
-    @property
     def microtime(self, get_as_float = False):
         if get_as_float:
             return time.time()
         else:
             return '%f %d' % math.modf(time.time())
 
-    @property
     def usecTime(self) :
         mt = self.microtime(False)
         mt_array = mt.split(" ")[:2];
@@ -128,105 +124,53 @@ class Ticker(models.Model):
 class Bithumb(models.Model):
 
     def get_ticker_info(self):
-        urlTicker = urllib.request.urlopen('https://api.bithumb.com/public/ticker/all')
+        urlTicker = urllib.request.urlopen('https://api.bithumb.com/public/ticker/ETH')
+        #urlTicker = urllib.request.urlopen('https://api.bithumb.com/public/ticker/all')
         readTicker = urlTicker.read()
         jsonTicker = json.loads(readTicker)
-        FindBTC = jsonTicker['data']['BTC']['closing_price']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['data']['ETH']['closing_price']
-        ETH = int(FindETH)
-        FindDASH = jsonTicker['data']['DASH']['closing_price']
-        DASH = int(FindDASH)
-        FindLTC = jsonTicker['data']['LTC']['closing_price']
-        LTC = int(FindLTC)
-        FindETC = jsonTicker['data']['ETC']['closing_price']
-        ETC = int(FindETC)
-        FindXRP = jsonTicker['data']['XRP']['closing_price']
-        XRP = int(FindXRP)\
+        ms = int(jsonTicker['data']["date"])
+        dt = datetime.fromtimestamp(ms / 1000)
+        timestampStr = dt.strftime("%Y-%m-%d (%H:%M:%S)")
+        jsonTicker['data']["date"] = timestampStr
+        return jsonTicker
 
 @python_2_unicode_compatible
 class UpBit(models.Model):
 
     def get_ticker_info(self):
-        urlTicker = urllib.request.urlopen('https://api.upbit.com/v1/ticker?markets/all')
-        #urlTicker = urllib.request.urlopen('https://api.upbit.com/v1/ticker?markets=KRW-ETH')
+        #urlTicker = urllib.request.urlopen('https://api.upbit.com/v1/ticker?markets/all')
+        urlTicker = urllib.request.urlopen('https://api.upbit.com/v1/ticker?markets=KRW-ETH')
         readTicker = urlTicker.read()
-        jsonTicker = json.loads(readTicker)
-        FindBTC = jsonTicker['data']['BTC']['closing_price']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['data']['ETH']['closing_price']
-        ETH = int(FindETH)
-        FindDASH = jsonTicker['data']['DASH']['closing_price']
-        DASH = int(FindDASH)
-        FindLTC = jsonTicker['data']['LTC']['closing_price']
-        LTC = int(FindLTC)
-        FindETC = jsonTicker['data']['ETC']['closing_price']
-        ETC = int(FindETC)
-        FindXRP = jsonTicker['data']['XRP']['closing_price']
-        XRP = int(FindXRP)
+        jsonTicker = json.loads(readTicker)[0]
+        ms = int(jsonTicker["timestamp"])
+        dt = datetime.fromtimestamp(ms / 1000)
+        timestampStr = dt.strftime("%Y-%m-%d (%H:%M:%S)")
+        jsonTicker['timestamp'] = timestampStr
+        return jsonTicker
 
 @python_2_unicode_compatible
 class Coinone(models.Model):
 
     def get_ticker_info(self):
-        urlTicker = urllib.request.urlopen('https://api.coinone.co.kr/ticker/?currency=all')
+        urlTicker = urllib.request.urlopen('https://api.coinone.co.kr/ticker/?currency=eth')
+        #urlTicker = urllib.request.urlopen('https://api.coinone.co.kr/ticker/?currency=all')
         readTicker = urlTicker.read()
         jsonTicker = json.loads(readTicker)
-        FindETC = jsonTicker['etc']['last']
-        ETC = int(FindETC)
-        FindBTC = jsonTicker['btc']['last']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['eth']['last']
-        ETH = int(FindETH)
-        FindXRP = jsonTicker['xrp']['last']
-        XRP = int(FindXRP)
-
-@python_2_unicode_compatible
-class Korbit(models.Model):
-
-    def get_ticker_info(self):
-        reqBTC = Request('https://api.korbit.co.kr/v1/ticker?currency_pair=btc_krw' , headers={'User-Agent': 'Mozilla/5.0'})
-        readBTC = urlopen(reqBTC).read()
-        jsonBTC = json.loads(readBTC)
-        FindBTC = jsonBTC['last']
-        BTC = int(FindBTC)
-        reqETH = Request('https://api.korbit.co.kr/v1/ticker?currency_pair=eth_krw' , headers={'User-Agent': 'Mozilla/5.0'})
-        readETH = urlopen(reqETH).read()
-        jsonETH = json.loads(readETH)
-        FindETH = jsonETH['last']
-        ETH = int(FindETH)
-        reqETC = Request('https://api.korbit.co.kr/v1/ticker?currency_pair=etc_krw' , headers={'User-Agent': 'Mozilla/5.0'})
-        readETC = urlopen(reqETC).read()
-        jsonETC = json.loads(readETC)
-        FindETC = jsonETC['last']
-        ETC = int(FindETC)
-        reqXRP = Request('https://api.korbit.co.kr/v1/ticker?currency_pair=xrp_krw' , headers={'User-Agent': 'Mozilla/5.0'})
-        readXRP = urlopen(reqXRP).read()
-        jsonXRP = json.loads(readXRP)
-        FindXRP = jsonXRP['last']
-        XRP = int(FindXRP)
+        ms = int(jsonTicker["timestamp"])
+        dt = datetime.fromtimestamp(ms / 1000)
+        timestampStr = dt.strftime("%Y-%m-%d (%H:%M:%S)")
+        jsonTicker['timestamp'] = timestampStr
+        return jsonTicker
 
 @python_2_unicode_compatible
 class Poloniex(models.Model):
     def get_ticker_info(self):
-        reqBTC = Request('https://poloniex.com/public?command=returnTicker' , headers={'User-Agent': 'Mozilla/5.0'})
-        readBTC = urlopen(reqBTC).read()
-        jsonBTC = json.loads(readBTC)
-        FindBTC = jsonBTC['last']
-        BTC = int(FindBTC)
         urlTicker = urllib.request.urlopen('https://poloniex.com/public?command=returnTicker')
         readTicker = urlTicker.read()
         jsonTicker = json.loads(readTicker)
-        FindETC = jsonTicker['etc']['last']
-        ETC = int(FindETC)
-        FindBTC = jsonTicker['btc']['last']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['eth']['last']
-        ETH = int(FindETH)
-        FindXRP = jsonTicker['xrp']['last']
-        XRP = int(FindXRP)
+        jsonTicker = jsonTicker['USDT_ETH']
+        return jsonTicker
 
-#None
 @python_2_unicode_compatible
 class Bitmex(models.Model):
     def get_ticker_info(self):
@@ -250,42 +194,19 @@ class Bitmex(models.Model):
 @python_2_unicode_compatible
 class Bittrex(models.Model):
     def get_ticker_info(self):
-        reqBTC = Request('https://bittrex.com/api/v1.1/public/getmarketsummaries' , headers={'User-Agent': 'Mozilla/5.0'})
-        readBTC = urlopen(reqBTC).read()
-        jsonBTC = json.loads(readBTC)
-        FindBTC = jsonBTC['last']
-        BTC = int(FindBTC)
-        urlTicker = urllib.request.urlopen('https://bittrex.com/api/v1.1/public/getmarketsummaries')
+        urlTicker = urllib.request.urlopen('https://api.bittrex.com/api/v1.1/public/getmarketsummary?market=usd-eth')
         readTicker = urlTicker.read()
         jsonTicker = json.loads(readTicker)
-        FindETC = jsonTicker['etc']['last']
-        ETC = int(FindETC)
-        FindBTC = jsonTicker['btc']['last']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['eth']['last']
-        ETH = int(FindETH)
-        FindXRP = jsonTicker['xrp']['last']
-        XRP = int(FindXRP)
+        jsonTicker = jsonTicker['result']
+        return jsonTicker
 
 @python_2_unicode_compatible
 class Kraken(models.Model):
     def get_ticker_info(self):
-        reqBTC = Request('https://api.kraken.com/0/public/Ticker?pair=ETHUSD' , headers={'User-Agent': 'Mozilla/5.0'})
-        readBTC = urlopen(reqBTC).read()
-        jsonBTC = json.loads(readBTC)
-        FindBTC = jsonBTC['last']
-        BTC = int(FindBTC)
         urlTicker = urllib.request.urlopen('https://api.kraken.com/0/public/Ticker?pair=ETHUSD')
         readTicker = urlTicker.read()
-        jsonTicker = json.loads(readTicker)
-        FindETC = jsonTicker['etc']['last']
-        ETC = int(FindETC)
-        FindBTC = jsonTicker['btc']['last']
-        BTC = int(FindBTC)
-        FindETH = jsonTicker['eth']['last']
-        ETH = int(FindETH)
-        FindXRP = jsonTicker['xrp']['last']
-        XRP = int(FindXRP)
+        jsonTicker = json.loads(readTicker)['result']['XETHZUSD']
+        return jsonTicker
 
 @python_2_unicode_compatible
 class Coinbase(models.Model):

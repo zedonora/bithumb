@@ -11,9 +11,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    $( document ).ready(function() {
+        //setInterval(fetchdata,10000);
+        setInterval(fetchdata,100000);
+    });
+    function fetchdata(){
+        $.ajax({
+            url: '/trade/ajax/getticker/',
+            type: 'GET',
+			success : function(data) {
+                $('#jsonData').html("");
+                $.each(data, function(index) {
+                    $('#jsonData').append("<tr>"
+                                            +"<td>"+data[index].name+"</td>"
+                                            +"<td>"+data[index].ticker+"</td>"
+                                            +"<td>"+data[index].timestamp+"</td>"
+                                            +"<td>"+data[index].bidsprice+"@"+data[index].bidquantity+"</td>"
+                                            +"<td>"+data[index].asksprice+"@"+data[index].asksquantity+"</td>"
+                                           +"</tr>")
+                })
+            }
+        });
+    }
+    </script>
 </head>
 <body>
-<div class="container">
+<div class="container" id="data">
     <h2>가상화폐 거래 내용</h2>
     <p>현재 진행상황</p>
     <table class="table table-striped table-hover">
@@ -26,15 +52,19 @@
                 <th class="align-middle">매수요청물량<br>@가장근접매수호가</th>
             </tr>
         </thead>
-        <tbody>
+        {% if data %}
+        <tbody id="jsonData">
+            {% for row in data %}
             <tr>
-                <td>Bithumb</td>
-                <td>(KRW-ETH)</td>
-                <td>{{ timestamp }}</td>
-                <td>{{ bids.quantity }}@{{ bids.price }}</td>
-                <td>{{ asks.quantity }}@{{ asks.price }}</td>
+                <td>{{row.name}}</td>
+                <td>{{row.ticker}}</td>
+                <td>{{row.timestamp}}</td>
+                <td>{{row.bidsprice}}@{{row.bidquantity}}</td>
+                <td>{{row.asksprice}}@{{row.asksquantity}}</td>
             </tr>
+            {% endfor %}
         </tbody>
+        {% endif %}
     </table>
 </div>
 </body>
