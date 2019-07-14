@@ -252,7 +252,7 @@ class GetAjaxTicker(APIView):
 
         # Bitmex - ETH
         api = models.Bitmex
-        raw_data = api.get_ticker_info(self)[0]
+        raw_data = api.get_ticker_info(self)
         index = index + 1
         row['id'] = index
         row['name'] = 'Bitmex'
