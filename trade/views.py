@@ -319,3 +319,13 @@ class GetAjaxTicker(APIView):
         return_json = {}
         return_json['data'] = return_list
         return JsonResponse(return_list, safe=False)
+
+class PrivateTrade(APIView):
+
+    def get(self, request, format=None):
+
+        url_info = models.UrlInfo
+        url_info.get_url_info_main(self)
+        return Response(status= status.HTTP_200_OK)
+
+

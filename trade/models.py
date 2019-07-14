@@ -1,5 +1,10 @@
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+
+import asyncio
+# aiohttp 설치 필요
+import aiohttp
+
 import pybithumb
 import time
 import math
@@ -226,3 +231,31 @@ class Coinbase(models.Model):
         jsonTicker['ask_price'] = ask_price
         jsonTicker['ask_size'] = ask_size
         return jsonTicker
+
+#https://sjquant.tistory.com/14?category=770799
+@python_2_unicode_compatible
+class UrlInfo(models.Model):
+
+    async def get_bitumb_info(self, url):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                print(resp.status)
+                print(await resp.json())
+
+    async def get_coinbase_info(self):
+        pass
+
+    async def get_all_private(self):
+        urls = ['https://api.bithumb.com/public/ticker/ETH']
+        futures = [asyncio.ensure_future(self.get_bitumb_info(url)) for url in urls]
+        print(futures)
+        await asyncio.gather(*futures)
+        #self.get_coinbase_info()
+
+
+    def get_url_info_main(self):
+
+        # 비동기 시작
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self.get_all_private())
+
