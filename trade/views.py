@@ -324,8 +324,8 @@ class PrivateTrade(APIView):
 
     def get(self, request, format=None):
 
-        url_info = models.UrlInfo
-        url_info.get_url_info_main(self)
+        url_info = models.UrlInfo()
+        url_info.get_url_info_main()
         return Response(status= status.HTTP_200_OK)
 
 

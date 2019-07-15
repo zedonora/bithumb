@@ -236,26 +236,48 @@ class Coinbase(models.Model):
 @python_2_unicode_compatible
 class UrlInfo(models.Model):
 
-    async def get_bitumb_info(self, url):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                print(resp.status)
-                print(await resp.json())
+    loop = ""
 
-    async def get_coinbase_info(self):
-        pass
+    # getA
+    async def get_market_info(self, division):
+        async with aiohttp.ClientSession() as session:
+
+            rtn_json = {}
+            if division == 'bitumb':
+                async with session.get('https://api.bithumb.com/public/ticker/ETH') as resp:
+                    result_json = await resp.json()
+                    rtn_json['price'] = result_json['data']['closing_price']
+                    rtn_json['buy_price'] = result_json['data']['buy_price']
+                    rtn_json['sell_price'] = result_json['data']['sell_price']
+                    await json.loads(rtn_json)
+            if division == 'upbit':
+                async with session.get('https://api.upbit.com/v1/ticker?markets=KRW-ETH') as resp:
+                    result_json = await resp.json()
+                    rtn_json['price'] = result_json[0]['trade_price']
+                    rtn_json['buy_price'] = result_json[0]['high_price']
+                    rtn_json['sell_price'] = result_json[0]['low_price']
+                    await json.loads(rtn_json)
+
+    #comCal
+    async def diff_bet_two(self, first_market, second_market):
+        first_json = await self.loop.run_in_executor(None, self.get_market_info(first_market))
+        second_json = await self.loop.run_in_executor(None, self.get_market_info(second_market))
+
+        print(first_json)
+        print(second_json)
 
     async def get_all_private(self):
-        urls = ['https://api.bithumb.com/public/ticker/ETH']
-        futures = [asyncio.ensure_future(self.get_bitumb_info(url)) for url in urls]
-        print(futures)
-        await asyncio.gather(*futures)
+        market_name = ['bithumb', 'upbit']
+        for each in range(len(market_name)-1):
+            # futures = [asyncio.ensure_future(self.get_market_info(market_name[each]))]
+            # print(futures)
+            await asyncio.gather(self.diff_bet_two(market_name[each], market_name[each+1]))
         #self.get_coinbase_info()
 
-
     def get_url_info_main(self):
-
         # 비동기 시작
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(self.get_all_private())
+        #loop = asyncio.get_event_loop()
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
+        self.loop.run_until_complete(self.get_all_private())
 
