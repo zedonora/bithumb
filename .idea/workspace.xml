@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c8de878f-bc20-4be9-9ab6-6683aec409e4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/trade/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/trade/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/trade/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="c8de878f-bc20-4be9-9ab6-6683aec409e4" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trade/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="250" column="22" selection-start-line="250" selection-start-column="22" selection-end-line="250" selection-end-column="22" />
+            <state relative-caret-position="344">
+              <caret line="248" column="60" lean-forward="true" selection-start-line="248" selection-start-column="60" selection-end-line="248" selection-end-column="60" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -250,12 +244,12 @@
       <workItem from="1562843279958" duration="2882000" />
       <workItem from="1562868439415" duration="13185000" />
       <workItem from="1563103236071" duration="297000" />
-      <workItem from="1563133411386" duration="3908000" />
+      <workItem from="1563133411386" duration="3960000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52830000" />
+    <option name="totallyTimeSpent" value="52882000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -268,7 +262,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16666667" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -439,8 +432,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trade/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="250" column="22" selection-start-line="250" selection-start-column="22" selection-end-line="250" selection-end-column="22" />
+        <state relative-caret-position="344">
+          <caret line="248" column="60" lean-forward="true" selection-start-line="248" selection-start-column="60" selection-end-line="248" selection-end-column="60" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
